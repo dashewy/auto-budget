@@ -28,10 +28,10 @@ class BudgetTester(unittest.TestCase):
     def test_updater(self):
         transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Wawa Fuel', "amount": 23.28}).updater()
         self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Transportation'), "$23.28")
-        
-    def test_updater_string(self):
-        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Trader Joes', "amount": "$23.28"}).updater()
-        self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Groceries'), "$23.28")  
+    # pass test for single comma but cant run every test without 429
+    def test_updater_string_monopoly(self):
+        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'subaru', "amount": "$1,000,000.28"}).updater()
+        self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Transportation'), "$1,000,023.56")                 
         
     def test_updater_string_no_dollar(self):
         transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'other', "amount": "23.28"}).updater()
@@ -54,7 +54,7 @@ if __name__ == '__main__':
     suite.addTest(BudgetTester('test_transportation_bucketer'))
     suite.addTest(BudgetTester('test_misc_bucketer'))
     suite.addTest(BudgetTester('test_updater'))
-    suite.addTest(BudgetTester('test_updater_string'))
+    suite.addTest(BudgetTester('test_updater_string_monopoly'))        
     suite.addTest(BudgetTester('test_updater_string_no_dollar'))        
     suite.addTest(BudgetTester('test_reset'))
     
