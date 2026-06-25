@@ -164,6 +164,7 @@ Tests cover merchant bucketing (regex → category) and live sheet read/write ag
 ## TODO
 
 - continue shortcut testing and integration
+- charge log with hash and date.now()
 - make google sheet prettier
 - update unittest to test more regex cases OR just test individual for cases
 - explore gspread.find() to attempt to clear index dependencies
