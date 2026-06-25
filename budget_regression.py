@@ -29,6 +29,14 @@ class BudgetTester(unittest.TestCase):
         transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Wawa Fuel', "amount": 23.28}).updater()
         self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Transportation'), "$23.28")
         
+    def test_updater_string(self):
+        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Trader Joes', "amount": "$23.28"}).updater()
+        self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Groceries'), "$23.28")  
+        
+    def test_updater_string_no_dollar(self):
+        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'other', "amount": "$23.28"}).updater()
+        self.assertEqual(SheetUpdater(TEST_BUDGET, {"merchant": 'misc', "amount": 0}).get_value('Misc'), "$23.28")               
+        
     # also notice this clears the sheet so ^ SHOULD always be valid - when running with test suite not unittest.main()
     # test reset & reset_check
     def test_reset(self):
@@ -46,6 +54,8 @@ if __name__ == '__main__':
     suite.addTest(BudgetTester('test_transportation_bucketer'))
     suite.addTest(BudgetTester('test_misc_bucketer'))
     suite.addTest(BudgetTester('test_updater'))
+    suite.addTest(BudgetTester('test_updater_string'))
+    suite.addTest(BudgetTester('test_updater_string_no_dollar'))        
     suite.addTest(BudgetTester('test_reset'))
     
     runner = unittest.TextTestRunner()
