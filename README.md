@@ -102,7 +102,8 @@ Only `merchant` and `amount` are required for the sheet update logic.
 ## Apple Shortcut integration
 
 If using Juno on Iphone select run code, and paste this into the code section. 
-make sure files are on phone in correct location.
+Make sure files are on phone in correct location. 
+Easier to put creds in same folder in juno and update creds path in .env and drop os.path.expanduser() for g_cred..
 
 ```python
 from budget_engine import run
