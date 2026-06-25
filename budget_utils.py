@@ -29,7 +29,10 @@ class SheetUpdater:
 
     @staticmethod
     def to_number(num):
-        return float(num.replace('$', '').replace(',', ''))
+        if isinstance(num, float) or isinstance(num, int):
+            return num
+        else:
+            return float(num.replace('$', '').replace(',', ''))
             
     @staticmethod
     def to_dollar(num):
@@ -101,7 +104,7 @@ class SheetUpdater:
         if not self.transaction:
             raise ValueError('Transaction required for updates')
         
-        charge = float(self.transaction.get('amount', False))
+        charge = SheetUpdater.to_number(self.transaction.get('amount', False))
         category = self.bucketer()
         df = self.to_df()
         

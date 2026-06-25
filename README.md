@@ -106,13 +106,20 @@ Make sure files are on phone in correct location.
 Easier to put creds in same folder in juno and update creds path in .env and drop os.path.expanduser() for g_cred..
 
 ```python
-from budget_engine import run
-try:
-    run(TEST_BUDGET, sys.argv[2])
-except IndexError:
-    print('check index')
-```
+from budget_engine import run, json, TEST_BUDGET
 
+try:
+      data = json.loads(sys.argv[2])
+      run(TEST_BUDGET, data)
+except IndexError:
+      print("check index")
+```
+For reseting the dynamic columns.
+```python
+from budget_engine import clear, TEST_BUDGET
+
+clear(TEST_BUDGET)
+```
 ## Usage
 
 ### Log a transaction
