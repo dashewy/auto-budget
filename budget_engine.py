@@ -1,4 +1,5 @@
 from budget_utils import SheetUpdater, TEST_BUDGET
+import sys
 
 
 def run(budget, transaction=None):
@@ -26,9 +27,17 @@ def clear(budget):
         return print(f'Error: {e}')
     
 
-if __name__ == '__main__':
+# if __name__ == '__main__':
     
-    test_hash = {'card': 'apple', 'merchant': "trader joes", 'name': 'User', 'amount': 176.76}
+#     test_hash = {'card': 'apple', 'merchant': "trader joes", 'name': 'User', 'amount': 176.76}
     
-    # run(TEST_BUDGET, test_hash)
-    # clear(TEST_BUDGET)
+#     # run(TEST_BUDGET, test_hash)
+#     # clear(TEST_BUDGET)
+
+# For apple atuomation
+
+# from budget_engine import run
+# try:
+#     run(TEST_BUDGET, sys.argv[2])
+# except IndexError:
+#     print('check index')
