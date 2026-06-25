@@ -113,7 +113,12 @@ try:
 except IndexError:
       print("check index")
 ```
+For reseting the dynamic columns.
+```python
+from budget_engine import clear, TEST_BUDGET
 
+clear(TEST_BUDGET)
+```
 ## Usage
 
 ### Log a transaction
