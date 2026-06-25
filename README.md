@@ -101,7 +101,16 @@ Only `merchant` and `amount` are required for the sheet update logic.
 
 ## Apple Shortcut integration
 
-TBD - Needs more testing to perfect
+If using Juno on Iphone select run code, and paste this into the code section. 
+make sure files are on phone in correct location.
+
+```python
+from budget_engine import run
+try:
+    run(TEST_BUDGET, sys.argv[2])
+except IndexError:
+    print('check index')
+```
 
 ## Usage
 
