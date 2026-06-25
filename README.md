@@ -105,11 +105,13 @@ If using Juno on Iphone select run code, and paste this into the code section.
 make sure files are on phone in correct location.
 
 ```python
-from budget_engine import run
+from budget_engine import run, json, TEST_BUDGET
+
 try:
-    run(TEST_BUDGET, sys.argv[2])
+      data = json.loads(sys.argv[2])
+      run(TEST_BUDGET, data)
 except IndexError:
-    print('check index')
+      print("check index")
 ```
 
 ## Usage

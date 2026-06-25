@@ -1,5 +1,6 @@
 from budget_utils import SheetUpdater, TEST_BUDGET
 import sys
+import json
 
 
 def run(budget, transaction=None):
@@ -36,8 +37,11 @@ def clear(budget):
 
 # For apple atuomation
 
-# from budget_engine import run
+# from budget_engine import run (shortcut dict not coming over as json coerce below)
+# from budget_engine import run, json, TEST_BUDGET
+
 # try:
-#     run(TEST_BUDGET, sys.argv[2])
+#       data = json.loads(sys.argv[2])
+#       run(TEST_BUDGET, data)
 # except IndexError:
-#     print('check index')
+#       print("check index")
