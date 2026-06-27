@@ -159,11 +159,13 @@ class SheetUpdater:
     def reset_check(self):
         
         new_df = self.to_df()
+        # <--- gspread -> pandas isna("") = False
+        new_df['Charges'] = new_df.Charges.replace("", None) 
         total_dynamic_series = new_df.query("`Money Out` == 'Total Dynamic'")
         
         td_idx = total_dynamic_series.index[0]
         
-        if SheetUpdater.to_number(total_dynamic_series.at[td_idx, 'Expense Amount']) == 0:
+        if SheetUpdater.to_number(total_dynamic_series.at[td_idx, 'Expense Amount']) == 0 and new_df.Charges.isna().all():
             return True
         
         else:
@@ -195,7 +197,8 @@ if __name__ == '__main__':
         
     test_hash = {'card': 'Visa', 'merchant': 'other', 'name': 'User', 'amount': 20.32}
     
-    # test_case = SheetUpdater(TEST_BUDGET, test_hash)
+    test_case = SheetUpdater(TEST_BUDGET, test_hash)
+    print(test_case.reset_check())
     
     # print(test_case.updater())
     # print(test_case.reset()

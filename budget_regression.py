@@ -26,7 +26,7 @@ class BudgetTester(unittest.TestCase):
         
     # testing updater  
     def test_updater(self):
-        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Wawa Fuel', "amount": 23.28}).updater(test=True)
+        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'Wawa Fuel', "amount": 23.28}).updater(test=True) # keeps date from showing up
         self.assertEqual(SheetUpdater(TEST_BUDGET).get_value('Transportation'), "$23.28")
     
     def test_charge_log(self):

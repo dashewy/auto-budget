@@ -140,10 +140,11 @@ transaction = {
 run(BUDGET, transaction)
 ```
 
-### Reset dynamic expense categories
+### Reset dynamic expense categories, and charge log
 
-Zeros out **Expense Amount** for every category between the `dynamic` and `Misc` rows (useful at the start of a new budget period):
+Zeros out **Expense Amount** for every category between the `dynamic` and `Misc` rows (useful at the start of a new budget period) as well as the charge log:
 
+Using this code, it will also run reset_check() to ensure that charges and dynamic is empty.
 ```python
 from budget_engine import clear
 from budget_utils import BUDGET
@@ -183,4 +184,4 @@ clear out all charges when you reset your dynamic spend.
 - make google sheet prettier
 - update unittest to test more regex cases for real world merchant name data
 - explore gspread.find() to attempt to clear index dependencies - works better switch up helper methods to use this.
-- add check to reset_check() to make sure charges is clear
+- contiue live testing, name does not seem to be `User_name` so far
