@@ -18,8 +18,8 @@ g_cred = gspread.service_account(full_path)
 class SheetUpdater:
     
     def __init__(self, budget_sheet, transaction=None, headers: list = ['Money Out', 'Income Amount', 'Expense Amount', 'Charges'], page: int=0):
-        
-        self.transaction = transaction
+        # fixes unwanted format on keys
+        self.transaction = {key.replace(" ", ""): value for key, value in transaction.items()} if transaction else {}
         self.budget_sheet = budget_sheet
         self.headers = headers
         self.page = page
@@ -91,7 +91,7 @@ class SheetUpdater:
             (self.home_regex, 'Home')
         ]
         # make sure defualt does not pass regex
-        merchant = self.transaction.get('merchant', 'Not Found') 
+        merchant = self.transaction.get('merchant', 'Not Found')
         
         for pattern, val in cat_table:
             
@@ -133,7 +133,7 @@ class SheetUpdater:
         # need to always keep misc at the bottom for this to be more explcit, and have dynamic seperator
         df = self.to_df()
         sheet = self.get_sheet()
-        dynamic_series = df.query("`Money Out` == 'dynamic'")
+        dynamic_series = df.query("`Money Out` == 'Dynamic'")
         misc_series = df.query("`Money Out` == 'Misc'")
         # clear charges col
         charges = sheet.find('Charges')
@@ -197,9 +197,9 @@ if __name__ == '__main__':
         
     test_hash = {'card': 'Visa', 'merchant': 'other', 'name': 'User', 'amount': 20.32}
     
-    test_case = SheetUpdater(TEST_BUDGET, test_hash)
-    print(test_case.reset_check())
-    
+    # test_case = SheetUpdater(TEST_BUDGET, test_hash)
+    # print(test_case.reset_check())
+    # print(test_case.bucketer())
     # print(test_case.updater())
     # print(test_case.reset()
     # print(test_case.get_value('Misc'))

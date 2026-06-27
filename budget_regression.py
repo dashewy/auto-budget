@@ -35,13 +35,13 @@ class BudgetTester(unittest.TestCase):
         charge_cell = sheet.find('Charges')
         self.assertEqual(sheet.cell(2, charge_cell.col).value, "{'merchant': 'Wawa Fuel', 'amount': 23.28}")
         
-    # pass test for single comma but cant run every test without 429
+    # pass test for single comma but cant run every test without 429, adding whitespace on keys
     def test_updater_string_monopoly(self):
-        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'subaru', "amount": "$1,000,000.28"}).updater()
+        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant ": 'subaru', "amount": "$1,000,000.28"}).updater()
         self.assertEqual(SheetUpdater(TEST_BUDGET).get_value('Transportation'), "$1,000,023.56")                 
         
     def test_updater_string_no_dollar(self):
-        transportation_update = SheetUpdater(TEST_BUDGET, {"merchant": 'other', "amount": "23.28"}).updater()
+        transportation_update = SheetUpdater(TEST_BUDGET, {" merchant": 'other', "amount ": "23.28"}).updater()
         self.assertEqual(SheetUpdater(TEST_BUDGET).get_value('Misc'), "$23.28")               
         
     # also notice this clears the sheet so ^ SHOULD always be valid - when running with test suite not unittest.main()
