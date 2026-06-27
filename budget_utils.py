@@ -133,7 +133,7 @@ class SheetUpdater:
         # need to always keep misc at the bottom for this to be more explcit, and have dynamic seperator
         df = self.to_df()
         sheet = self.get_sheet()
-        dynamic_series = df.query("`Money Out` == 'dynamic'")
+        dynamic_series = df.query("`Money Out` == 'Dynamic'")
         misc_series = df.query("`Money Out` == 'Misc'")
         # clear charges col
         charges = sheet.find('Charges')
