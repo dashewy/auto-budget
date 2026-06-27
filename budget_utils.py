@@ -2,6 +2,7 @@ import pandas as pd
 import gspread 
 import re
 import os
+from datetime import datetime
 from dotenv import load_dotenv 
 
 load_dotenv()
@@ -16,7 +17,7 @@ g_cred = gspread.service_account(full_path)
 
 class SheetUpdater:
     
-    def __init__(self, budget_sheet, transaction=None, headers: list = ['Money Out', 'Income Amount', 'Expense Amount'], page: int=0):
+    def __init__(self, budget_sheet, transaction=None, headers: list = ['Money Out', 'Income Amount', 'Expense Amount', 'Charges'], page: int=0):
         
         self.transaction = transaction
         self.budget_sheet = budget_sheet
@@ -99,7 +100,7 @@ class SheetUpdater:
 
         return 'Misc'
 
-    def updater(self):
+    def updater(self, test=False):
         
         if not self.transaction:
             raise ValueError('Transaction required for updates')
@@ -115,7 +116,7 @@ class SheetUpdater:
         
         if current_series.empty:
             raise ValueError(f'No cat: {category}')
-
+        
         idx = current_series.index[0]
         current_amount = SheetUpdater.to_number(current_series.at[idx, 'Expense Amount'])
         updated_value = SheetUpdater.to_dollar(current_amount + charge)
@@ -123,6 +124,8 @@ class SheetUpdater:
         sheet = self.get_sheet()
         row, col = self.expense_cell(idx, sheet)
         sheet.update_cell(row, col, updated_value)
+        
+        self.charge_log(date=test, sheet=sheet)
         
         return True
    
@@ -132,6 +135,14 @@ class SheetUpdater:
         sheet = self.get_sheet()
         dynamic_series = df.query("`Money Out` == 'dynamic'")
         misc_series = df.query("`Money Out` == 'Misc'")
+        # clear charges col
+        charges = sheet.find('Charges')
+        charge_idx = charges.col
+        
+        charge_start = gspread.utils.rowcol_to_a1(2, charge_idx)
+        charge_end = gspread.utils.rowcol_to_a1(sheet.row_count, charge_idx)
+        
+        sheet.batch_clear([f'{charge_start}:{charge_end}'])
         
         if dynamic_series.empty or misc_series.empty:
             raise ValueError(f'No dynamic separator OR missing Misc')
@@ -157,6 +168,27 @@ class SheetUpdater:
         
         else:
             return False
+    # for easy unittesting keep date under control flow
+    def charge_log(self, date=False, sheet=None):
+        # had to flip to make test in updater, test=True -> no date
+        if not date:
+            self.transaction['date'] = str(datetime.now().strftime("%Y-%m-%d"))
+        # lowers api calls, used in updater which already runs get_sheet() twice
+        if not sheet:
+            sheet = self.get_sheet()
+            
+        # .find() works way better
+        header_cell = sheet.find('Charges')
+        
+        if not header_cell:
+            # most likley picked up in the init but leave for now
+            raise ValueError("No header names 'Charges'")
+        
+        col_idx = header_cell.col
+        col_val = sheet.col_values(col_idx)
+        
+        sheet.update_cell(len(col_val) + 1, col_idx, str(self.transaction))
+        
     
 
 if __name__ == '__main__':
@@ -168,3 +200,7 @@ if __name__ == '__main__':
     # print(test_case.updater())
     # print(test_case.reset()
     # print(test_case.get_value('Misc'))
+    
+    # this gets the savings, can use in apple shortcuts 
+    # print(SheetUpdater(TEST_BUDGET).get_value('Total Savings'))
+    # test_case.charge_log()

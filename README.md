@@ -172,10 +172,15 @@ Tests cover merchant bucketing (regex → category) and live sheet read/write ag
 | Home | `HOME_REGEX` |
 | Misc | default when no regex matches |
 
+## Charge log
+
+Appends a new charge hash to charges, this contians the full transaction hash with a new date key, which uses the current date. 
+Called inside updater, can be removed if not wanted. This depends on a charges column being present. Also in reset where you can 
+clear out all charges when you reset your dynamic spend.
+
 ## TODO
 
-- continue shortcut testing and integration
-- charge log with hash and date.now()
 - make google sheet prettier
-- update unittest to test more regex cases OR just test individual for cases
-- explore gspread.find() to attempt to clear index dependencies
+- update unittest to test more regex cases for real world merchant name data
+- explore gspread.find() to attempt to clear index dependencies - works better switch up helper methods to use this.
+- add check to reset_check() to make sure charges is clear
