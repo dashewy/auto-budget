@@ -185,3 +185,4 @@ clear out all charges when you reset your dynamic spend.
 - update unittest to test more regex cases for real world merchant name data
 - explore gspread.find() to attempt to clear index dependencies - works better switch up helper methods to use this.
 - contiue live testing, name does not seem to be `User_name` so far
+- check concurrent user issues
