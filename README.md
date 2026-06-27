@@ -106,7 +106,7 @@ Make sure files are on phone in correct location.
 Easier to put creds in same folder in juno and update creds path in .env and drop os.path.expanduser() for g_cred.
 
 Note: you can also use Juno run file selection, and place these into a new script file, this seems more consistent. 
-Make sure to update the index of the argument `sys.argc[1]`.
+Make sure to update the index of the argument `sys.argv[1]`.
 
 ```python
 from budget_engine import run, json, TEST_BUDGET
