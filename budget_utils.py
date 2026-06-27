@@ -18,8 +18,8 @@ g_cred = gspread.service_account(full_path)
 class SheetUpdater:
     
     def __init__(self, budget_sheet, transaction=None, headers: list = ['Money Out', 'Income Amount', 'Expense Amount', 'Charges'], page: int=0):
-        
-        self.transaction = transaction
+        # fixes unwanted format on keys
+        self.transaction = {key.replace(" ", ""): value for key, value in transaction.items()} if transaction else {}
         self.budget_sheet = budget_sheet
         self.headers = headers
         self.page = page
@@ -91,7 +91,7 @@ class SheetUpdater:
             (self.home_regex, 'Home')
         ]
         # make sure defualt does not pass regex
-        merchant = self.transaction.get('merchant', 'Not Found') 
+        merchant = self.transaction.get('merchant', 'Not Found').strip() 
         
         for pattern, val in cat_table:
             
@@ -195,10 +195,12 @@ class SheetUpdater:
 
 if __name__ == '__main__':
         
-    test_hash = {'card': 'Visa', 'merchant': 'other', 'name': 'User', 'amount': 20.32}
+    # test_hash = {'card': 'Visa', 'merchant': 'other', 'name': 'User', 'amount': 20.32}
+    test_hash = {'merchant': "Senor's Market", 'amount': '$9.58', 'card': 'Apple Card', 'name': "Senor's Market", 'date': '2026-06-27'}
     
     test_case = SheetUpdater(TEST_BUDGET, test_hash)
-    print(test_case.reset_check())
+    # print(test_case.reset_check())
+    print(test_case.bucketer())
     
     # print(test_case.updater())
     # print(test_case.reset()
