@@ -72,13 +72,16 @@ class SheetUpdater:
         
         return current_budget
 
-    def to_df(self):
+    def to_df(self, and_sheet=False):
         
         sheet = self.get_sheet()
         
         budget_dict = sheet.get_all_records(expected_headers=self.headers)
 
         budget_df = pd.DataFrame(budget_dict)
+        
+        if and_sheet:
+            return budget_df, sheet
         
         return budget_df
         
@@ -107,7 +110,7 @@ class SheetUpdater:
         
         charge = SheetUpdater.to_number(self.transaction.get('amount', False))
         category = self.bucketer()
-        df = self.to_df()
+        df, sheet = self.to_df(and_sheet=True)
         
         if not charge:
             raise ValueError('No charge amount present')
@@ -121,7 +124,7 @@ class SheetUpdater:
         current_amount = SheetUpdater.to_number(current_series.at[idx, 'Expense Amount'])
         updated_value = SheetUpdater.to_dollar(current_amount + charge)
         
-        sheet = self.get_sheet()
+
         row, col = self.expense_cell(idx, sheet)
         sheet.update_cell(row, col, updated_value)
         
@@ -131,8 +134,7 @@ class SheetUpdater:
    
     def reset(self):
         # need to always keep misc at the bottom for this to be more explcit, and have dynamic seperator
-        df = self.to_df()
-        sheet = self.get_sheet()
+        df, sheet = self.to_df(and_sheet=True)
         dynamic_series = df.query("`Money Out` == 'Dynamic'")
         misc_series = df.query("`Money Out` == 'Misc'")
         # clear charges col
