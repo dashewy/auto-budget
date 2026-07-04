@@ -11,9 +11,9 @@ class BudgetTester(unittest.TestCase):
     def test_grocery_bucketer(self):
       grocery = SheetUpdater("any_sheet", {"merchant": "trader Joe's"})
       self.assertEqual(grocery.bucketer(), "Groceries")   
-      
+    # adding unicode "pretty" apostrophe
     def test_food_out_bucketer(self):
-      food_out = SheetUpdater("any_sheet", {"merchant": "McDonald's"})
+      food_out = SheetUpdater("any_sheet", {"merchant": "McDonald’s"})
       self.assertEqual(food_out.bucketer(), "Food Out") 
 
     def test_transportation_bucketer(self):
