@@ -96,9 +96,11 @@ class SheetUpdater:
         # make sure defualt does not pass regex
         merchant = self.transaction.get('merchant', 'Not Found')
         
+        clean_merchant = merchant.encode('ascii', 'ignore').decode('ascii')
+        
         for pattern, val in cat_table:
             
-            if re.search(pattern, merchant):
+            if re.search(pattern, clean_merchant):
                 return val
 
         return 'Misc'
