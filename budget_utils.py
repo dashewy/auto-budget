@@ -105,7 +105,7 @@ class SheetUpdater:
 
         return 'Misc'
 
-    def updater(self, test=False):
+    def updater(self, test=False, diff=False):
         
         if not self.transaction:
             raise ValueError('Transaction required for updates')
@@ -126,6 +126,8 @@ class SheetUpdater:
         current_amount = SheetUpdater.to_number(current_series.at[idx, 'Expense Amount'])
         updated_value = SheetUpdater.to_dollar(current_amount + charge)
         
+        if diff:
+            self.transaction['diff'] = f'{category} | diff {current_amount} | {updated_value}'
 
         row, col = self.expense_cell(idx, sheet)
         sheet.update_cell(row, col, updated_value)
